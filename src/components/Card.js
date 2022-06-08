@@ -1,22 +1,46 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-const Card = ({ card, onCardClick }) => {
+const Card = ({ card, onCardClick, onCardLike, onCardDelete }) => {
+    const currentUser = useContext(CurrentUserContext);
     const handleClick = () => {
         onCardClick(card);
     };
+    const handleLikeClick = () => {
+        onCardLike(card);
+    };
+    const handleDeleteClick = () => {
+        onCardDelete(card._id);
+    };
+    const isOwn = card.owner._id === currentUser._id;
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const cardLikeButtonClassName = (
+        `card__like ${isLiked ? 'card__like_active' : ''}`
+    );
 
     return (
         <article className="elements__element card">
-            <button className="card__delete" title="Удалить"></button>
-            <img className="card__item" title="Открыть в полном размере"
+            {isOwn && <button
+                className="card__delete"
+                title="Удалить"
+                onClick={handleDeleteClick}
+            />}
+            <img
+                className="card__item"
+                title="Открыть в полном размере"
                 src={card.link}
                 alt={card.name}
-                onClick={handleClick} />
+                onClick={handleClick}
+            />
             <div className="card__grid-block">
                 <h2 className="card__text">{card.name}</h2>
                 <div className="card__likes">
                     <span className="card__number">{card.likes.length}</span>
-                    <button className="card__like" title="Нравиться"></button>
+                    <button
+                        className={cardLikeButtonClassName}
+                        title="Нравиться"
+                        onClick={handleLikeClick}
+                    />
                 </div>
             </div>
         </article>

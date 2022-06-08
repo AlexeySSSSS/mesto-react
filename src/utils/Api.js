@@ -37,17 +37,9 @@ class Api {
             .then(res => this._responseAnalysis(res));
     }
 
-    deleteLikes(item) {
+    changeLikeCardStatus(item, isLiked) {
         return fetch(`${this._baseUrl}/cards/${item}/likes`, {
-            method: 'DELETE',
-            headers: this._headers
-        })
-            .then(res => this._responseAnalysis(res));
-    }
-
-    likesImage(item) {
-        return fetch(`${this._baseUrl}/cards/${item}/likes`, {
-            method: 'PUT',
+            method: `${!isLiked ? 'DELETE' : 'PUT'}`,
             headers: this._headers
         })
             .then(res => this._responseAnalysis(res));
@@ -64,7 +56,7 @@ class Api {
             .then(res => this._responseAnalysis(res));
     }
 
-    changeUserinformation(item) {
+    changeUserInformation(item) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: this._headers,
